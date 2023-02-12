@@ -32,6 +32,7 @@ function handleButtonPress(event: MouseEvent) {
     } else {
       const commandValue = newCommand.value;
       const commandObj: obj = {};
+
       if (commandValue === "mode") {
         if (mode === "BRIEF") {
           mode = "VERBOSE";
@@ -40,34 +41,17 @@ function handleButtonPress(event: MouseEvent) {
         }
         commandObj[commandValue] = `Mode was changed to ${mode}`;
         commandList.push(commandObj);
-        handleChangeMode();
+        replHistory.innerHTML += `<p>${commandObj[commandValue]}</p>`;
       } else {
         commandObj[commandValue] = "placeholder";
         commandList.push(commandObj);
-        replHistory.innerHTML += `<p>${commandObj[commandValue]}</p>`;
+        if (mode === "BRIEF") {
+          replHistory.innerHTML += `<p>${commandObj[commandValue]}</p>`;
+        } else {
+          replHistory.innerHTML += `<p>Command: ${commandValue}</p>`;
+          replHistory.innerHTML += `<p>Output: ${commandObj[commandValue]}</p>`;
+        }
       }
     }
-  }
-}
-
-function handleChangeMode() {
-  const replHistory = document.getElementsByClassName("repl-history")[0];
-  replHistory.innerHTML = "";
-
-  if (mode === "BRIEF") {
-    commandList.forEach((element) => {
-      const value = Array.from(Object.values(element))[0];
-      replHistory.innerHTML += value;
-      replHistory.innerHTML += "<br><br>";
-    });
-  } else {
-    commandList.forEach((element) => {
-      const key = Array.from(Object.keys(element))[0];
-      const value = Array.from(Object.values(element))[0];
-      replHistory.innerHTML = replHistory.innerHTML + "Command: " + key;
-      replHistory.innerHTML += "<br>";
-      replHistory.innerHTML = replHistory.innerHTML + "Output: " + value;
-      replHistory.innerHTML += "<br><br>";
-    });
   }
 }
