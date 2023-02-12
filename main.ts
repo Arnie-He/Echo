@@ -2,16 +2,17 @@ window.onload = () => {
   prepareButtonPress();
 };
 
-let isVerbose = false;
-let commandList = {};
+type obj = { [key: string]: Object };
+let mode = "BRIEF";
+let commandList = new Array();
 
 function prepareButtonPress() {
   const maybeButtons = document.getElementsByClassName("submit-button");
   const maybeButton = maybeButtons.item(0);
   if (maybeButton == null) {
-    console.log("couldn't find the button");
+    console.log("Couldn't find the button");
   } else if (!(maybeButton instanceof HTMLButtonElement)) {
-    console.log("found element, but wasn't button element");
+    console.log("Found element, but wasn't button element");
   } else {
     maybeButton.addEventListener("click", handleButtonPress);
   }
@@ -29,38 +30,44 @@ function handleButtonPress(event: MouseEvent) {
       console.log("Command could not be found");
     } else if (!(newCommand instanceof HTMLInputElement)) {
     } else {
-      commandList.set(newCommand.value, "placeholder");
-      if (newCommand.value === "mode") {
-        changeMode();
-      } else {
-        replHistory.innerHTML += `<p>${newCommand.value}</p>`;
-        if (isVerbose === true) {
-          replHistory.innerHTML += "<p>placeholder</p>";
+      const commandValue = newCommand.value;
+      const commandObj: obj = {};
+      if (commandValue === "mode") {
+        if (mode === "BRIEF") {
+          mode = "VERBOSE";
+        } else {
+          mode = "BRIEF";
         }
+        commandObj[commandValue] = `Mode was changed to ${mode}`;
+        commandList.push(commandObj);
+        handleChangeMode();
+      } else {
+        commandObj[commandValue] = "placeholder";
+        commandList.push(commandObj);
+        replHistory.innerHTML += `<p>${commandObj[commandValue]}</p>`;
       }
     }
   }
 }
 
-function changeMode() {
+function handleChangeMode() {
   const replHistory = document.getElementsByClassName("repl-history")[0];
   replHistory.innerHTML = "";
-  const keys = Array.from(commandList.keys());
-  const values = Array.from(commandList.values());
 
-  if (isVerbose === true) {
-    keys.forEach((key) => {
-      replHistory.innerHTML += key;
-      replHistory.innerHTML += "<br>";
-    });
-    isVerbose = false;
-  } else {
-    Array.from(keys).map(function (k, v) {
-      replHistory.innerHTML = replHistory.innerHTML + "Command: " + k;
-      replHistory.innerHTML += "<br>";
-      replHistory.innerHTML = replHistory.innerHTML + "Output: " + values[v];
+  if (mode === "BRIEF") {
+    commandList.forEach((element) => {
+      const value = Array.from(Object.values(element))[0];
+      replHistory.innerHTML += value;
       replHistory.innerHTML += "<br><br>";
     });
-    isVerbose = true;
+  } else {
+    commandList.forEach((element) => {
+      const key = Array.from(Object.keys(element))[0];
+      const value = Array.from(Object.values(element))[0];
+      replHistory.innerHTML = replHistory.innerHTML + "Command: " + key;
+      replHistory.innerHTML += "<br>";
+      replHistory.innerHTML = replHistory.innerHTML + "Output: " + value;
+      replHistory.innerHTML += "<br><br>";
+    });
   }
 }
