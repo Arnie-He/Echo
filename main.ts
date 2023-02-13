@@ -100,9 +100,13 @@ function handleButtonPress(event: MouseEvent) {
         });
 
         // User story #4
-      } else if (commandValue === "search") {
-        // Invalid command
-      } else {
+      } else if (commandValue.includes("search")) {
+        let column = commandValue.split(" ")[1];
+        let value = commandValue.split(" ")[2];
+        // call the back-end searching method using column and value.
+      }
+      // Invalid command
+      else {
         if (mode === "BRIEF") {
           replHistory.innerHTML += `<p>Could not recognize that command</p>`;
         } else {
