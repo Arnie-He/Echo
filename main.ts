@@ -1,3 +1,5 @@
+import { getData } from "./mockData/csvData";
+
 window.onload = () => {
   prepareButtonPress();
   prepareCSVList();
@@ -78,7 +80,7 @@ function handleButtonPress(event: MouseEvent) {
         // User story #2
       } else if (commandValue.includes("load_file")) {
         const filePath = commandValue.split(" ")[1];
-        const csvFile = csvList.get(filePath);
+        const csvFile = getData();
         if (csvFile != undefined) {
           loadedCSV = csvFile;
           commandObj[commandValue] = `Successfully loaded ${filePath}`;

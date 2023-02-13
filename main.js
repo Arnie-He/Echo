@@ -1,11 +1,18 @@
+"use strict";
+exports.__esModule = true;
+var csvData_1 = require("./mockData/csvData");
 window.onload = function () {
     prepareButtonPress();
     prepareCSVList();
 };
 var mode = "BRIEF";
+// List of commands shown in the repl-history
 var commandList = new Array();
+// Currently loaded CSV
 var loadedCSV = new Array();
+// Stores mocked CSV data
 var csvList = new Map();
+// Mocked CSV data
 function prepareCSVList() {
     csvList.set("csv1", [
         ["1", "2", "3", "4", "5"],
@@ -34,6 +41,10 @@ function prepareButtonPress() {
         maybeButton.addEventListener("click", handleButtonPress);
     }
 }
+// TODO: This function is HUGE! Factor out some of the logic, especially the repeated if(mode === "BRIEF")...
+// blocks
+// TODO: More edge case checking (e.g. add an error message if a user tries to view before loading a CSV)
+// TODO: Search functionality (user story #4)
 function handleButtonPress(event) {
     var replHistory = document.getElementsByClassName("repl-history")[0];
     if (event === null) {
@@ -43,15 +54,18 @@ function handleButtonPress(event) {
         console.log("Unable to process list of commands");
     }
     else {
+        // Gets user input
         var newCommand = document.getElementsByClassName("repl-command-box")[0];
         if (newCommand === null) {
             console.log("Command could not be found");
         }
         else if (!(newCommand instanceof HTMLInputElement)) {
+            console.log("Found command, but wasn't an input element");
         }
         else {
             var commandValue = newCommand.value;
             var commandObj = {};
+            // User story #1
             if (commandValue === "mode") {
                 if (mode === "BRIEF") {
                     mode = "VERBOSE";
@@ -62,10 +76,11 @@ function handleButtonPress(event) {
                 commandObj[commandValue] = "Mode was changed to ".concat(mode);
                 commandList.push(commandObj);
                 replHistory.innerHTML += "<p>".concat(commandObj[commandValue], "</p>");
+                // User story #2
             }
             else if (commandValue.includes("load_file")) {
                 var filePath = commandValue.split(" ")[1];
-                var csvFile = csvList.get(filePath);
+                var csvFile = (0, csvData_1.getData)();
                 if (csvFile != undefined) {
                     loadedCSV = csvFile;
                     commandObj[commandValue] = "Successfully loaded ".concat(filePath);
@@ -81,13 +96,16 @@ function handleButtonPress(event) {
                 else {
                     console.log("CSV file could not be found");
                 }
+                // User story #3
             }
             else if (commandValue === "view") {
                 loadedCSV.forEach(function (row) {
                     replHistory.innerHTML += "<p>".concat(row, "</p>");
                 });
+                // User story #4
             }
             else if (commandValue === "search") {
+                // Invalid command
             }
             else {
                 if (mode === "BRIEF") {
