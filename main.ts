@@ -102,9 +102,11 @@ function deal_command() {
 
       // User story #2
     } else if (commandValue.includes("load_file")) {
+      // This line doesn't do anything right now
       const filePath = commandValue.split(" ")[1];
+      //csvList.set(`${filePath}`, "WHOOOOOOO");
       let gd = new csvData();
-      const csvFile = gd.getData();
+      const csvFile = csvList.gd.get(`${filePath}`);
       if (csvFile != undefined) {
         loadedCSV = csvFile;
         commandObj[commandValue] = `Successfully loaded ${filePath}`;
@@ -116,11 +118,15 @@ function deal_command() {
           replHistory.innerHTML += `<p>Output: ${commandObj[commandValue]}</p>`;
         }
       } else {
-        console.log("CSV file could not be found");
+        replHistory.innerHTML += "<p>CSV file could not be found</p>";
       }
 
       // User story #3
     } else if (commandValue === "view") {
+      if (loadedCSV.length === 0) {
+        replHistory.innerHTML += "<p>No CSV file has been loaded yet</p>";
+        return;
+      }
       loadedCSV.forEach((row) => {
         replHistory.innerHTML += `<p>${row}</p>`;
       });
@@ -147,3 +153,5 @@ function deal_command() {
     }
   }
 }
+
+//export { prepareButtonPress, handleButtonPress };

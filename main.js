@@ -70,8 +70,10 @@ function handleButtonPress(event) {
         replHistory.innerHTML += "<p>".concat(commandObj[commandValue], "</p>");
         // User story #2
       } else if (commandValue.includes("load_file")) {
+        // This line doesn't do anything right now
         var filePath = commandValue.split(" ")[1];
-        var csvFile = (0, csvData_1.getData)();
+        //csvList.set(`${filePath}`, "WHOOOOOOO");
+        var csvFile = csvList.get("".concat(filePath));
         if (csvFile != undefined) {
           loadedCSV = csvFile;
           commandObj[commandValue] = "Successfully loaded ".concat(filePath);
@@ -92,10 +94,14 @@ function handleButtonPress(event) {
             );
           }
         } else {
-          console.log("CSV file could not be found");
+          replHistory.innerHTML += "<p>CSV file could not be found</p>";
         }
         // User story #3
       } else if (commandValue === "view") {
+        if (loadedCSV.length === 0) {
+          replHistory.innerHTML += "<p>No CSV file has been loaded yet</p>";
+          return;
+        }
         loadedCSV.forEach(function (row) {
           replHistory.innerHTML += "<p>".concat(row, "</p>");
         });
@@ -115,3 +121,4 @@ function handleButtonPress(event) {
     }
   }
 }
+//export { prepareButtonPress, handleButtonPress };
