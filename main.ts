@@ -106,7 +106,7 @@ function deal_command() {
       const filePath = commandValue.split(" ")[1];
       //csvList.set(`${filePath}`, "WHOOOOOOO");
       let gd = new csvData();
-      const csvFile = csvList.gd.get(`${filePath}`);
+      const csvFile = csvList.get(`${filePath}`);
       if (csvFile != undefined) {
         loadedCSV = csvFile;
         commandObj[commandValue] = `Successfully loaded ${filePath}`;
