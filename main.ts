@@ -1,4 +1,4 @@
-import { getData } from "./mockData/csvData";
+//import { getData } from "./mockData/csvData";
 
 window.onload = () => {
   prepareButtonPress();
@@ -79,8 +79,10 @@ function handleButtonPress(event: MouseEvent) {
 
         // User story #2
       } else if (commandValue.includes("load_file")) {
+        // This line doesn't do anything right now
         const filePath = commandValue.split(" ")[1];
-        const csvFile = getData();
+        //csvList.set(`${filePath}`, "WHOOOOOOO");
+        const csvFile = csvList.get(`${filePath}`);
         if (csvFile != undefined) {
           loadedCSV = csvFile;
           commandObj[commandValue] = `Successfully loaded ${filePath}`;
@@ -92,11 +94,15 @@ function handleButtonPress(event: MouseEvent) {
             replHistory.innerHTML += `<p>Output: ${commandObj[commandValue]}</p>`;
           }
         } else {
-          console.log("CSV file could not be found");
+          replHistory.innerHTML += "<p>CSV file could not be found</p>";
         }
 
         // User story #3
       } else if (commandValue === "view") {
+        if (loadedCSV.length === 0) {
+          replHistory.innerHTML += "<p>No CSV file has been loaded yet</p>";
+          return;
+        }
         loadedCSV.forEach((row) => {
           replHistory.innerHTML += `<p>${row}</p>`;
         });
@@ -115,3 +121,5 @@ function handleButtonPress(event: MouseEvent) {
     }
   }
 }
+
+//export { prepareButtonPress, handleButtonPress };
