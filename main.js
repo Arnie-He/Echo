@@ -1,5 +1,4 @@
 "use strict";
-exports.__esModule = true;
 var csvData_1 = require("./mockData/csvData");
 window.onload = function () {
   prepareButtonPress();
@@ -102,8 +101,10 @@ function handleButtonPress(event) {
         });
         // User story #4
       } else if (commandValue === "search") {
-        // Invalid command
-      } else {
+        let column = commandValue.split(" ")[1];
+        let value = commandValue.split(" ")[2];
+      } // Invalid command
+      else {
         if (mode === "BRIEF") {
           replHistory.innerHTML += "<p>Could not recognize that command</p>";
         } else {
