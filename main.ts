@@ -1,6 +1,6 @@
 import { getEnvironmentData } from "worker_threads";
-import { csvData } from "./mockData/csvData";
-import { SearchData } from "./mockData/SearchData";
+// import { csvData } from "./mockData/csvData";
+// import { SearchData } from "./mockData/SearchData";
 window.onload = () => {
   prepareButtonPress();
   prepareEnterFeature();
@@ -45,7 +45,7 @@ function prepareEnterFeature() {
   } else {
     input.addEventListener("keydown", (e) => {
       if (e.key == "Enter") {
-        deal_command();
+        handleCommand();
       }
     });
   }
@@ -63,21 +63,17 @@ function prepareButtonPress() {
   }
 }
 
-// TODO: This function is HUGE! Factor out some of the logic, especially the repeated if(mode === "BRIEF")...
-// blocks
-// TODO: More edge case checking (e.g. add an error message if a user tries to view before loading a CSV)
-// TODO: Search functionality (user story #4)
 function handleButtonPress(event: MouseEvent) {
   if (event === null) {
     console.log("Button press was not registered");
   } else if (commandList === null) {
     console.log("Unable to process list of commands");
   } else {
-    deal_command();
+    handleCommand();
   }
 }
 
-function deal_command() {
+function handleCommand() {
   // Gets user input
   const replHistory = document.getElementsByClassName("repl-history")[0];
   const newCommand = document.getElementsByClassName("repl-command-box")[0];
@@ -88,6 +84,7 @@ function deal_command() {
   } else {
     const commandValue = newCommand.value;
     const commandObj: obj = {};
+    let output = "";
 
     // User story #1
     if (commandValue === "mode") {
@@ -96,27 +93,19 @@ function deal_command() {
       } else {
         mode = "BRIEF";
       }
-      commandObj[commandValue] = `Mode was changed to ${mode}`;
-      commandList.push(commandObj);
-      replHistory.innerHTML += `<p>${commandObj[commandValue]}</p>`;
+      output = `Mode was changed to ${mode}`;
 
       // User story #2
     } else if (commandValue.includes("load_file")) {
       // This line doesn't do anything right now
       const filePath = commandValue.split(" ")[1];
       //csvList.set(`${filePath}`, "WHOOOOOOO");
-      let gd = new csvData();
+      // let gd = new csvData();
       const csvFile = csvList.get(`${filePath}`);
       if (csvFile != undefined) {
         loadedCSV = csvFile;
-        commandObj[commandValue] = `Successfully loaded ${filePath}`;
+        output = `Successfully loaded ${filePath}`;
         commandList.push(commandObj);
-        if (mode === "BRIEF") {
-          replHistory.innerHTML += `<p>${commandObj[commandValue]}</p>`;
-        } else {
-          replHistory.innerHTML += `<p>Command: ${commandValue}</p>`;
-          replHistory.innerHTML += `<p>Output: ${commandObj[commandValue]}</p>`;
-        }
       } else {
         replHistory.innerHTML += "<p>CSV file could not be found</p>";
       }
@@ -124,34 +113,51 @@ function deal_command() {
       // User story #3
     } else if (commandValue === "view") {
       if (loadedCSV.length === 0) {
-        replHistory.innerHTML += "<p>No CSV file has been loaded yet</p>";
-        return;
+        output = "<p>No CSV file has been loaded yet</p>";
       }
+      output += "<table>";
       loadedCSV.forEach((row) => {
-        replHistory.innerHTML += `<p>${row}</p>`;
+        output += "<tr>";
+        row.forEach((col) => {
+          output += `<td>${col}</td>`;
+        });
+        output += "</tr>";
       });
+      output += "</table>";
 
       // User story #4
     } else if (commandValue.includes("search")) {
-      let column = commandValue.split(" ")[0];
-      let value = commandValue.split(" ")[1];
-      // call the back-end searching method using column and value.
-      // mock the back-end for this sprint
-      let sd = new SearchData();
-      sd.search_result(loadedCSV, column, value).forEach((row) => {
-        replHistory.innerHTML += `<p>${row}</p>`;
-      });
+      // let column = commandValue.split(" ")[0];
+      // let value = commandValue.split(" ")[1];
+      // // call the back-end searching method using column and value.
+      // // mock the back-end for this sprint
+      // let sd = new SearchData();
+      // sd.search_result(loadedCSV, column, value).forEach((row) => {
+      //   replHistory.innerHTML += `<p>${row}</p>`;
+      // });
     }
     // Invalid command
     else {
-      if (mode === "BRIEF") {
-        replHistory.innerHTML += `<p>Could not recognize that command</p>`;
-      } else {
-        replHistory.innerHTML += `<p>Command: ${commandValue}</p>`;
-        replHistory.innerHTML += `<p>Could not recognize that command</p>`;
-      }
+      output = `<p>Could not recognize that command</p>`;
     }
+
+    updateHTML(commandValue, output, commandObj, replHistory);
   }
 }
 
-//export { prepareButtonPress, handleButtonPress };
+function updateHTML(
+  commandValue: string,
+  output: string,
+  commandObj: obj,
+  replHistory: Element
+) {
+  commandObj[commandValue] = output;
+  commandList.push(commandObj);
+  if (mode === "BRIEF") {
+    replHistory.innerHTML += `<p>${commandObj[commandValue]}</p>`;
+  } else {
+    replHistory.innerHTML += `<p>Command: ${commandValue}</p>`;
+    replHistory.innerHTML += `<p>Output: ${commandObj[commandValue]}</p>`;
+    replHistory.innerHTML += "<hr/>";
+  }
+}

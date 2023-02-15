@@ -8,4 +8,4 @@ class SearchData {
     else return EmptyRes;
   }
 }
-export { SearchData };
+// export { SearchData };
