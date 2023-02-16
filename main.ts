@@ -1,6 +1,6 @@
 import { getEnvironmentData } from "worker_threads";
-// import { csvData } from "./mockData/csvData";
-// import { SearchData } from "./mockData/SearchData";
+import { csvData } from "mockData/csvData.js";
+import { SearchData } from "mockData/SearchData.js";
 window.onload = () => {
   prepareButtonPress();
   prepareEnterFeature();
@@ -15,6 +15,12 @@ let commandList = new Array();
 let loadedCSV = new Array<Array<string>>();
 // Stores mocked CSV data
 const csvList = new Map<string, Array<Array<string>>>();
+
+function clearHistory() {
+  mode = "BRIEF";
+  commandList = [];
+  loadedCSV = [[]];
+}
 
 // Mocked CSV data
 function prepareCSVList() {
@@ -127,14 +133,15 @@ function handleCommand() {
 
       // User story #4
     } else if (commandValue.includes("search")) {
-      // let column = commandValue.split(" ")[0];
-      // let value = commandValue.split(" ")[1];
-      // // call the back-end searching method using column and value.
-      // // mock the back-end for this sprint
-      // let sd = new SearchData();
-      // sd.search_result(loadedCSV, column, value).forEach((row) => {
-      //   replHistory.innerHTML += `<p>${row}</p>`;
-      // });
+      let column = commandValue.split(" ")[1];
+      let value = commandValue.split(" ")[2];
+      // call the back-end searching method using column and value.
+      // mock the back-end for this sprint
+      let sd = new SearchData();
+      sd.search_result(loadedCSV, column, value).forEach((row) => {
+        replHistory.innerHTML += `<p>Searching Result:</p>`;
+        replHistory.innerHTML += `<p>${row}</p>`;
+      });
     }
     // Invalid command
     else {
@@ -142,6 +149,8 @@ function handleCommand() {
     }
 
     updateHTML(commandValue, output, commandObj, replHistory);
+    var inputValue = (<HTMLInputElement>document.getElementById("input"))
+      .onreset;
   }
 }
 
@@ -160,4 +169,12 @@ function updateHTML(
     replHistory.innerHTML += `<p>Output: ${commandObj[commandValue]}</p>`;
     replHistory.innerHTML += "<hr/>";
   }
+}
+
+export { clearHistory, handleButtonPress, handleCommand };
+export function getmode(): any {
+  return mode;
+}
+export function getloadedCSV(): any {
+  return loadedCSV;
 }
