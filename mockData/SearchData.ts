@@ -1,3 +1,5 @@
+import { METHODS } from "http";
+
 class SearchData {
   SearchData(csv_file: String[][], column: String, value: String) {
     this.search_result(csv_file, column, value);
