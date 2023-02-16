@@ -1,5 +1,7 @@
-class csvData {
-    getData() {
+var csvData = /** @class */ (function () {
+    function csvData() {
+    }
+    csvData.prototype.getData = function () {
         return [
             ["1", "2", "3", "4", "5"],
             ["The", "song", "remains", "the", "same."],
@@ -7,6 +9,7 @@ class csvData {
             ["C", "S", "3", "2", "."],
             ["WOO", "HOO", "BADABING", "BADA", "BOOM"],
         ];
-    }
-}
+    };
+    return csvData;
+}());
 export { csvData };
