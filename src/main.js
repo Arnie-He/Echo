@@ -150,8 +150,6 @@ function handleCommand() {
             output_1 = "<p>Could not recognize that command</p>";
         }
         updateHTML(commandValue, output_1, commandObj, replHistory);
-        var inputValue = document.getElementById("input")
-            .onreset;
     }
 }
 // Updates the page to reflect the newly inputted command
@@ -170,10 +168,10 @@ function updateHTML(commandValue, output, commandObj, replHistory) {
     // Add a horizontal line for visiblity between commands
     replHistory.innerHTML += "<hr/>";
 }
-export { clearHistory, handleButtonPress, handleCommand };
-export function getmode() {
+function getMode() {
     return mode;
 }
-export function getloadedCSV() {
+function getLoadedCSV() {
     return loadedCSV;
 }
+export { clearHistory, prepareButtonPress, prepareEnterFeature, prepareCSVList, handleButtonPress, handleCommand, getMode, getLoadedCSV, };

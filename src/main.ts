@@ -159,8 +159,6 @@ function handleCommand() {
     }
 
     updateHTML(commandValue, output, commandObj, replHistory);
-    var inputValue = (<HTMLInputElement>document.getElementById("input"))
-      .onreset;
   }
 }
 
@@ -185,10 +183,21 @@ function updateHTML(
   replHistory.innerHTML += "<hr/>";
 }
 
-export { clearHistory, handleButtonPress, handleCommand };
-export function getmode(): any {
+function getMode() {
   return mode;
 }
-export function getloadedCSV(): any {
+
+function getLoadedCSV() {
   return loadedCSV;
 }
+
+export {
+  clearHistory,
+  prepareButtonPress,
+  prepareEnterFeature,
+  prepareCSVList,
+  handleButtonPress,
+  handleCommand,
+  getMode,
+  getLoadedCSV,
+};
