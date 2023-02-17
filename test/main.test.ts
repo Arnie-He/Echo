@@ -1,14 +1,22 @@
-import * as main from "main.js";
+import * as main from "../main.js";
 import "@testing-library/jest-dom";
 
 const startHTML = `<div class="repl">
+      <!-- Prepare a region of the page to hold the command history -->
       <div class="repl-history"></div>
       <hr />
+      <!-- Prepare a region of the page to hold the command input box -->
       <div class="repl-input">
-        <input type="text" class="repl-command-box" />
-        <button type="button" class="submit-button">submit</button>
+        <input
+          type="text"
+          class="repl-command-box"
+          placeholder="Enter command here!"
+          id="input"
+          ;
+        />
+        <button class="submit-button">SUBMIT</button>
       </div>
-</div>`;
+    </div>`;
 
 let maybeInput: HTMLElement | null;
 
@@ -16,14 +24,29 @@ beforeEach(() => {
   main.clearHistory();
   document.body.innerHTML = startHTML;
 
-  maybeInput = document.getElementById("repl-command-box");
+  maybeInput = document.getElementsByName("repl-command-box")[0];
 });
 
 test("loading a file", () => {
   if (maybeInput instanceof HTMLInputElement) {
     maybeInput.value = "load_file csv1";
   }
-
+  document.body.innerHTML = `<div class="repl">
+      <!-- Prepare a region of the page to hold the command history -->
+      <div class="repl-history"></div>
+      <hr />
+      <!-- Prepare a region of the page to hold the command input box -->
+      <div class="repl-input">
+        <input
+          type="text"
+          class="repl-command-box"
+          placeholder="Enter command here!"
+          id="input"
+          ;
+        />
+        <button class="submit-button">SUBMIT</button>
+      </div>
+    </div>`;
   main.handleCommand();
 
   const onfile: String[][] = [

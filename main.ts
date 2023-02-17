@@ -1,6 +1,6 @@
 import { getEnvironmentData } from "worker_threads";
-import { csvData } from "mockData/csvData.js";
-import { SearchData } from "mockData/SearchData.js";
+import { csvData } from "./mockData/csvData.js";
+import { SearchData } from "./mockData/SearchData.js";
 window.onload = () => {
   prepareButtonPress();
   prepareEnterFeature();
@@ -138,7 +138,7 @@ function handleCommand() {
       // call the back-end searching method using column and value.
       // mock the back-end for this sprint
       let sd = new SearchData();
-      sd.search_result(loadedCSV, column, value).forEach((row) => {
+      sd.searchResult(loadedCSV, column, value).forEach((row) => {
         replHistory.innerHTML += `<p>Searching Result:</p>`;
         replHistory.innerHTML += `<p>${row}</p>`;
       });
