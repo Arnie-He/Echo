@@ -9,6 +9,12 @@ title {
   color: rgb(82, 124, 138);
 }
 
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
 h1 {
   background-color: rgb(122, 168, 184);
   text-transform: capitalize;

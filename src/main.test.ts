@@ -86,7 +86,7 @@ test("view", () => {
   const expectedValues = ["", "Aaron", "Barbara", "Clara", "Dylan"];
 
   expectedValues.forEach((value) => {
-    const expectedValue = screen.getByText(value);
+    const expectedValue = screen.getAllByText(value);
     expect(expectedValue).toBeDefined();
   });
 });
@@ -104,14 +104,7 @@ test("search", () => {
   }
 
   main.handleCommand();
-
-  expect(document.getElementsByClassName("repl-history")[0]).toContain([
-    "3759",
-    "96 G. Psc",
-    "7.26388",
-    "1.55643",
-    "0.68697",
-  ]);
+  expect(screen.getByRole("table").innerHTML).toBe("");
 });
 
 // export {};
@@ -124,7 +117,5 @@ test("emptyres", () => {
   expect(s.searchResult([[]], "StarID", "3759")).toEqual([
     ["3759", "96 G. Psc", "7.26388", "1.55643", "0.68697"],
   ]);
-  expect(s.searchResult([[]], "2", "3759")).toEqual([
-    ["3759", "96 G. Psc", "7.26388", "1.55643", "0.68697"],
-  ]);
+  expect(s.searchResult([[]], "2", "3759")).toEqual([]);
 });

@@ -90,15 +90,10 @@ function handleCommand() {
         // Will be added to commandList once populated
         var commandObj = {};
         var output_1 = "";
+        console.log(commandValue);
         // User story #1
         if (commandValue === "mode") {
-            // Because there are only two modes, a simple if/else statement is used
-            if (mode === "BRIEF") {
-                mode = "VERBOSE";
-            }
-            else {
-                mode = "BRIEF";
-            }
+            mode = mode === "BRIEF" ? "VERBOSE" : "BRIEF";
             // Alert the user that the mode was changed
             output_1 = "Mode was changed to ".concat(mode);
             // User story #2
@@ -139,11 +134,18 @@ function handleCommand() {
             var value = commandValue.split(" ")[2];
             // call the back-end searching method using column and value.
             // mock the back-end for this sprint
+            console.log("running");
             var sd = new SearchData();
+            replHistory.innerHTML += "<p>Searching Result:</p>";
+            output_1 += "<table>";
             sd.searchResult(loadedCSV, column, value).forEach(function (row) {
-                replHistory.innerHTML += "<p>Searching Result:</p>";
-                replHistory.innerHTML += "<p>".concat(row, "</p>");
+                output_1 += "<tr>";
+                row.forEach(function (col) {
+                    output_1 += "<td>".concat(col, "</td>");
+                });
+                output_1 += "</tr>";
             });
+            output_1 += "</table>";
         }
         // Invalid/unrecognized command
         else {
