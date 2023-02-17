@@ -115,37 +115,46 @@ function handleCommand() {
         }
         else if (commandValue === "view") {
             if (loadedCSV.length === 0) {
-                output_1 = "<p>No CSV file has been loaded yet</p>";
+                output_1 = "<p>No CSV file has been loaded yet.</p>";
             }
-            // Construct a table based on the values in the mocked data
-            output_1 += "<table>";
-            loadedCSV.forEach(function (row) {
-                output_1 += "<tr>";
-                row.forEach(function (col) {
-                    output_1 += "<td>".concat(col, "</td>");
+            else {
+                // Construct a table based on the values in the mocked data
+                output_1 += "<table>";
+                loadedCSV.forEach(function (row) {
+                    output_1 += "<tr>";
+                    row.forEach(function (col) {
+                        output_1 += "<td>".concat(col, "</td>");
+                    });
+                    output_1 += "</tr>";
                 });
-                output_1 += "</tr>";
-            });
-            output_1 += "</table>";
+                output_1 += "</table>";
+            }
             // User story #4
         }
         else if (commandValue.includes("search")) {
-            var column = commandValue.split(" ")[1];
-            var value = commandValue.split(" ")[2];
-            // call the back-end searching method using column and value.
-            // mock the back-end for this sprint
-            console.log("running");
-            var sd = new SearchData();
-            replHistory.innerHTML += "<p>Searching Result:</p>";
-            output_1 += "<table>";
-            sd.searchResult(loadedCSV, column, value).forEach(function (row) {
-                output_1 += "<tr>";
-                row.forEach(function (col) {
-                    output_1 += "<td>".concat(col, "</td>");
+            var parsed = commandValue.split(" ");
+            if (parsed.length != 3) {
+                output_1 += "<p>Wrong number of parameters.</p>";
+                console.log("Wrong number of parameters.");
+            }
+            else {
+                var column = parsed[1];
+                var value = parsed[2];
+                // call the back-end searching method using column and value.
+                // mock the back-end for this sprint
+                console.log("running");
+                var sd = new SearchData();
+                replHistory.innerHTML += "<p>Searching Result:</p>";
+                output_1 += "<table>";
+                sd.searchResult(loadedCSV, column, value).forEach(function (row) {
+                    output_1 += "<tr>";
+                    row.forEach(function (col) {
+                        output_1 += "<td>".concat(col, "</td>");
+                    });
+                    output_1 += "</tr>";
                 });
-                output_1 += "</tr>";
-            });
-            output_1 += "</table>";
+                output_1 += "</table>";
+            }
         }
         // Invalid/unrecognized command
         else {

@@ -1,3 +1,4 @@
+import { isElementAccessExpression } from "typescript";
 import {
   getFiveColumnCSV,
   getOneColumnCSV,
@@ -123,38 +124,45 @@ function handleCommand() {
       // User story #3
     } else if (commandValue === "view") {
       if (loadedCSV.length === 0) {
-        output = "<p>No CSV file has been loaded yet</p>";
-      }
-      // Construct a table based on the values in the mocked data
-      output += "<table>";
-      loadedCSV.forEach((row) => {
-        output += "<tr>";
-        row.forEach((col) => {
-          output += `<td>${col}</td>`;
+        output = `<p>No CSV file has been loaded yet.</p>`;
+      } else {
+        // Construct a table based on the values in the mocked data
+        output += "<table>";
+        loadedCSV.forEach((row) => {
+          output += "<tr>";
+          row.forEach((col) => {
+            output += `<td>${col}</td>`;
+          });
+          output += "</tr>";
         });
-        output += "</tr>";
-      });
-      output += "</table>";
+        output += "</table>";
+      }
 
       // User story #4
     } else if (commandValue.includes("search")) {
-      let column = commandValue.split(" ")[1];
-      let value = commandValue.split(" ")[2];
-      // call the back-end searching method using column and value.
-      // mock the back-end for this sprint
-      console.log("running");
-      let sd = new SearchData();
+      let parsed = commandValue.split(" ");
+      if (parsed.length != 3) {
+        output += `<p>Wrong number of parameters.</p>`;
+        console.log("Wrong number of parameters.");
+      } else {
+        let column = parsed[1];
+        let value = parsed[2];
+        // call the back-end searching method using column and value.
+        // mock the back-end for this sprint
+        console.log("running");
+        let sd = new SearchData();
 
-      replHistory.innerHTML += `<p>Searching Result:</p>`;
-      output += "<table>";
-      sd.searchResult(loadedCSV, column, value).forEach((row) => {
-        output += "<tr>";
-        row.forEach((col) => {
-          output += `<td>${col}</td>`;
+        replHistory.innerHTML += `<p>Searching Result:</p>`;
+        output += "<table>";
+        sd.searchResult(loadedCSV, column, value).forEach((row) => {
+          output += "<tr>";
+          row.forEach((col) => {
+            output += `<td>${col}</td>`;
+          });
+          output += "</tr>";
         });
-        output += "</tr>";
-      });
-      output += "</table>";
+        output += "</table>";
+      }
     }
     // Invalid/unrecognized command
     else {

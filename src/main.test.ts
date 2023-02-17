@@ -119,3 +119,45 @@ test("emptyres", () => {
   ]);
   expect(s.searchResult([[]], "2", "3759")).toEqual([]);
 });
+
+// interaction error
+
+test("Unreadable command", () => {
+  const commandBox = document.getElementsByClassName("repl-command-box")[0];
+  if (commandBox instanceof HTMLInputElement) {
+    commandBox.value = "slsls";
+  }
+
+  main.handleCommand();
+
+  expect(screen.getAllByText("Could not recognize that command").length).toBe(
+    1
+  );
+});
+
+test("Wrong number of paramters", () => {
+  const commandBox = document.getElementsByClassName("repl-command-box")[0];
+  if (commandBox instanceof HTMLInputElement) {
+    commandBox.value = "load_file mockedData/csv1";
+  }
+
+  main.handleCommand();
+
+  if (commandBox instanceof HTMLInputElement) {
+    commandBox.value = "search 0";
+  }
+
+  main.handleCommand();
+  expect(screen.getAllByText("Wrong number of parameters.").length).toBe(1);
+});
+
+test("view before load", () => {
+  const commandBox = document.getElementsByClassName("repl-command-box")[0];
+  if (commandBox instanceof HTMLInputElement) {
+    commandBox.value = "view";
+  }
+
+  main.handleCommand();
+
+  expect(screen.getAllByText("No CSV file has been loaded yet").length).toBe(1);
+});
