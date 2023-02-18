@@ -17,7 +17,7 @@ var csvList = new Map();
 function clearHistory() {
     mode = "BRIEF";
     commandList = [];
-    loadedCSV = [[]];
+    loadedCSV = new Array();
 }
 // Set up the mocked CSV data
 // Note: the filenames do not represent actual file names
@@ -75,8 +75,10 @@ function handleButtonPress(event) {
 // Handles what happens when the user inputs and submits something
 function handleCommand() {
     // Gets user input
-    // TODO: Narrow replHistory
     var replHistory = document.getElementsByClassName("repl-history")[0];
+    if (replHistory === null) {
+        console.log("REPL history could not be found.");
+    }
     var newCommand = document.getElementsByClassName("repl-command-box")[0];
     if (newCommand === null) {
         console.log("Command could not be found");

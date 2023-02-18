@@ -1,4 +1,3 @@
-import { isElementAccessExpression } from "typescript";
 import {
   getFiveColumnCSV,
   getOneColumnCSV,
@@ -27,7 +26,7 @@ const csvList = new Map<string, Array<Array<string>>>();
 function clearHistory() {
   mode = "BRIEF";
   commandList = [];
-  loadedCSV = [[]];
+  loadedCSV = new Array<Array<string>>();
 }
 
 // Set up the mocked CSV data
@@ -86,8 +85,10 @@ function handleButtonPress(event: MouseEvent) {
 // Handles what happens when the user inputs and submits something
 function handleCommand() {
   // Gets user input
-  // TODO: Narrow replHistory
   const replHistory = document.getElementsByClassName("repl-history")[0];
+  if (replHistory === null) {
+    console.log("REPL history could not be found.");
+  }
   const newCommand = document.getElementsByClassName("repl-command-box")[0];
 
   if (newCommand === null) {

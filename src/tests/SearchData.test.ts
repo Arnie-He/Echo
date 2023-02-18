@@ -1,4 +1,4 @@
-import * as sd from "../mockData/SearchData.js";
+import * as sd from "../../mockData/SearchData.js";
 
 test("emptyres", () => {
   let s = new sd.SearchData();

@@ -1,7 +1,7 @@
-import * as main from "./main.js";
+import * as main from "../main.js";
 import "@testing-library/jest-dom";
 import { screen } from "@testing-library/dom";
-import * as sd from "../mockData/SearchData.js";
+import * as sd from "../../mockData/SearchData.js";
 
 const startHTML = `<div class="repl">
 <div class="repl-history"></div>
@@ -18,21 +18,28 @@ const startHTML = `<div class="repl">
 </div>
 </div>`;
 
-//let maybeInput: HTMLInputElement | null;
-
 beforeEach(() => {
   main.clearHistory();
   document.body.innerHTML = startHTML;
-
-  // possibly don't need this
+  main.prepareCSVList();
   main.prepareButtonPress();
   main.prepareEnterFeature();
-  main.prepareCSVList();
-
-  //maybeInput = document.getElementsByClassName("repl-command-box")[0];
 });
 
-// TODO: Make sure text is displayed on screen
+test("view before load", () => {
+  const commandBox = document.getElementsByClassName("repl-command-box")[0];
+  if (commandBox instanceof HTMLInputElement) {
+    commandBox.value = "view";
+  }
+
+  main.handleCommand();
+
+  expect(main.getLoadedCSV().length).toBe(0);
+  expect(screen.getAllByText("No CSV file has been loaded yet.").length).toBe(
+    1
+  );
+});
+
 test("loading a file", () => {
   const commandBox = document.getElementsByClassName("repl-command-box")[0];
   if (commandBox instanceof HTMLInputElement) {
@@ -40,7 +47,6 @@ test("loading a file", () => {
   }
 
   main.handleCommand();
-  //main.handleButtonPress(new MouseEvent("click"));
 
   const onfile: String[][] = [
     ["1", "2", "3", "4", "5"],
@@ -107,8 +113,6 @@ test("search", () => {
   expect(screen.getByRole("table").innerHTML).toBe("");
 });
 
-// export {};
-
 test("emptyres", () => {
   let s = new sd.SearchData();
   expect(s.searchResult([[]], "0", "3759")).toEqual([
@@ -119,8 +123,6 @@ test("emptyres", () => {
   ]);
   expect(s.searchResult([[]], "2", "3759")).toEqual([]);
 });
-
-// interaction error
 
 test("Unreadable command", () => {
   const commandBox = document.getElementsByClassName("repl-command-box")[0];
@@ -149,15 +151,4 @@ test("Wrong number of paramters", () => {
 
   main.handleCommand();
   expect(screen.getAllByText("Wrong number of parameters.").length).toBe(1);
-});
-
-test("view before load", () => {
-  const commandBox = document.getElementsByClassName("repl-command-box")[0];
-  if (commandBox instanceof HTMLInputElement) {
-    commandBox.value = "view";
-  }
-
-  main.handleCommand();
-
-  expect(screen.getAllByText("No CSV file has been loaded yet").length).toBe(1);
 });

@@ -1,4 +1,4 @@
-import * as sd from "../mockData/SearchData.js";
+import * as sd from "../../mockData/SearchData.js";
 test("emptyres", function () {
     var s = new sd.SearchData();
     expect(s.searchResult([[]], "0", "3759")).toMatchObject([
