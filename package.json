@@ -1,6 +1,7 @@
 {
   "name": "cs32-echo-gwan1-nhe6",
   "version": "22.2.0",
+  "homepage": "https://Arnie-He.github.io/Echo",
   "description": "Brown CSCI0320 Sprint 2 Echo",
   "license": "UNLICENSED",
   "dependencies": {
